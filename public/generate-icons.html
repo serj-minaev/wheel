@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Генератор иконок PWA</title>
+</head>
+<body>
+    <h1>Генератор иконок PWA</h1>
+    <p>Откройте консоль браузера (F12) и выполните команды для генерации иконок.</p>
+    <canvas id="canvas" style="display: none;"></canvas>
+    
+    <script>
+        function generateIcon(size) {
+            const canvas = document.getElementById('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // Фон
+            ctx.fillStyle = '#333';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Рисуем колесо
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = size / 25;
+            const center = size / 2;
+            const radius = size * 0.4;
+            
+            // Внешний круг
+            ctx.beginPath();
+            ctx.arc(center, center, radius, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            // Средний круг
+            ctx.beginPath();
+            ctx.arc(center, center, radius * 0.75, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            // Внутренний круг
+            ctx.beginPath();
+            ctx.arc(center, center, radius * 0.5, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            // Линии (8 секторов)
+            for (let i = 0; i < 8; i++) {
+                const angle = (i * Math.PI * 2) / 8;
+                const x1 = center + Math.cos(angle) * radius * 0.5;
+                const y1 = center + Math.sin(angle) * radius * 0.5;
+                const x2 = center + Math.cos(angle) * radius;
+                const y2 = center + Math.sin(angle) * radius;
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+            }
+            
+            // Скачиваем
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `icon-${size}.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+                console.log(`✓ Создана иконка icon-${size}.png`);
+            });
+        }
+        
+        // Генерируем иконки
+        console.log('Генерация иконок...');
+        generateIcon(192);
+        setTimeout(() => generateIcon(512), 500);
+        console.log('Иконки будут скачаны автоматически. Сохраните их в папку public/');
+    </script>
+</body>
+</html>
+
