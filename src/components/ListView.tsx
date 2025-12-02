@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useWheelData } from '../hooks/useWheelData';
 import type { Metric } from '../types/wheel';
 import { getSectorColor } from '../utils/wheelCalculations';
@@ -14,6 +14,17 @@ function MetricItem({ metric, level, path, onScoreChange }: MetricItemProps) {
   const [isExpanded, setIsExpanded] = useState(level === 0);
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(metric.score.toString());
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  // Определение мобильного устройства
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const hasSubWheel = !!metric.subWheel && metric.subWheel.metrics.length > 0;
   const color = getSectorColor(metric.score);
@@ -47,114 +58,145 @@ function MetricItem({ metric, level, path, onScoreChange }: MetricItemProps) {
       <div
         style={{
           display: 'flex',
-          alignItems: 'center',
-          padding: '8px 12px',
+          flexDirection: isMobile ? 'column' : 'row',
+          alignItems: isMobile ? 'stretch' : 'center',
+          padding: isMobile ? '8px 12px 11px 12px' : '8px 12px',
           background: level === 0 ? '#fff' : '#f9f9f9',
           borderRadius: '6px',
-          border: `2px solid ${color}`,
-          borderLeftWidth: level === 0 ? '4px' : '2px',
+          border: '1px solid #e0e0e0',
+          borderBottom: '1px solid rgb(224, 224, 224)',
           transition: 'all 0.2s',
+          position: 'relative',
         }}
       >
-        {/* Кнопка раскрытия/сворачивания */}
-        {hasSubWheel && (
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            style={{
-              width: '24px',
-              height: '24px',
-              marginRight: '8px',
-              border: 'none',
-              background: '#e0e0e0',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '12px',
-            }}
-          >
-            {isExpanded ? '−' : '+'}
-          </button>
-        )}
-        {!hasSubWheel && <div style={{ width: '32px' }} />}
-
-        {/* Название метрики */}
+        {/* Верхняя строка: кнопка, название, оценка */}
         <div
           style={{
-            flex: 1,
-            fontWeight: level === 0 ? 'bold' : 'normal',
-            fontSize: level === 0 ? '16px' : '14px',
+            display: 'flex',
+            alignItems: 'center',
+            width: '100%',
           }}
         >
-          {metric.name}
-        </div>
+          {/* Кнопка раскрытия/сворачивания */}
+          {hasSubWheel && (
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              style={{
+                width: '24px',
+                height: '24px',
+                marginRight: '8px',
+                border: 'none',
+                background: '#e0e0e0',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '12px',
+                flexShrink: 0,
+              }}
+            >
+              {isExpanded ? '−' : '+'}
+            </button>
+          )}
+          {!hasSubWheel && !isMobile && <div style={{ width: '32px' }} />}
 
-        {/* Индикатор оценки (цветная полоса) */}
-        <div
-          style={{
-            width: '100px',
-            height: '8px',
-            background: '#e0e0e0',
-            borderRadius: '4px',
-            marginRight: '12px',
-            overflow: 'hidden',
-          }}
-        >
+          {/* Название метрики */}
           <div
             style={{
-              width: `${(metric.score / 10) * 100}%`,
-              height: '100%',
-              background: color,
-              transition: 'all 0.3s',
-            }}
-          />
-        </div>
-
-        {/* Оценка */}
-        {!isEditing ? (
-          <div
-            style={{
-              minWidth: '60px',
-              textAlign: 'center',
-              fontSize: '16px',
-              fontWeight: 'bold',
-              color: '#333',
-              cursor: 'pointer',
-              padding: '4px 8px',
-              borderRadius: '4px',
-              background: '#f0f0f0',
-            }}
-            onClick={() => {
-              setIsEditing(true);
-              setEditValue(metric.score.toString());
+              flex: 1,
+              fontWeight: level === 0 ? 'bold' : 'normal',
+              fontSize: level === 0 ? '16px' : '14px',
             }}
           >
-            {metric.score.toFixed(1)}
+            {metric.name}
           </div>
-        ) : (
-          <input
-            type="number"
-            min="0"
-            max="10"
-            step="0.1"
-            value={editValue}
-            onChange={(e) => setEditValue(e.target.value)}
-            onKeyDown={handleKeyDown}
-            onBlur={() => {
-              const score = parseFloat(editValue);
-              if (!isNaN(score)) {
-                handleScoreChange(score);
-              }
-            }}
-            autoFocus
+
+          {/* На десктопе: индикатор оценки */}
+          {!isMobile && (
+            <div
+              style={{
+                width: '100px',
+                height: '8px',
+                background: '#e0e0e0',
+                borderRadius: '4px',
+                marginRight: '12px',
+                overflow: 'hidden',
+              }}
+            >
+              <div
+                style={{
+                  width: `${(metric.score / 10) * 100}%`,
+                  height: '100%',
+                  background: color,
+                  transition: 'all 0.3s',
+                }}
+              />
+            </div>
+          )}
+
+          {/* Оценка */}
+          {!isEditing ? (
+            <div
+              style={{
+                minWidth: isMobile ? '50px' : '60px',
+                textAlign: 'center',
+                fontSize: isMobile ? '14px' : '16px',
+                fontWeight: 'bold',
+                color: '#333',
+                cursor: 'pointer',
+                padding: isMobile ? '2px 4px' : '4px 8px',
+                borderRadius: '4px',
+                background: isMobile ? 'transparent' : '#f0f0f0',
+              }}
+              onClick={() => {
+                setIsEditing(true);
+                setEditValue(metric.score.toString());
+              }}
+            >
+              {metric.score.toFixed(1)}
+            </div>
+          ) : (
+            <input
+              type="number"
+              min="0"
+              max="10"
+              step="0.1"
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              onBlur={() => {
+                const score = parseFloat(editValue);
+                if (!isNaN(score)) {
+                  handleScoreChange(score);
+                }
+              }}
+              autoFocus
+              style={{
+                width: isMobile ? '50px' : '60px',
+                padding: isMobile ? '2px 4px' : '4px 8px',
+                textAlign: 'center',
+                fontSize: isMobile ? '14px' : '16px',
+                border: '2px solid #333',
+                borderRadius: '4px',
+              }}
+            />
+          )}
+        </div>
+
+        {/* На мобильных: прогресс-бар внизу как border-bottom */}
+        {isMobile && (
+          <div
             style={{
-              width: '60px',
-              padding: '4px 8px',
-              textAlign: 'center',
-              fontSize: '16px',
-              border: '2px solid #333',
-              borderRadius: '4px',
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: '3px',
+              background: color,
+              borderRadius: '0 0 6px 6px',
+              width: `${(metric.score / 10) * 100}%`,
+              transition: 'all 0.3s',
             }}
           />
         )}
@@ -198,17 +240,6 @@ export function ListView() {
         overflow: 'hidden',
       }}
     >
-      <h1
-        style={{
-          marginBottom: '24px',
-          fontSize: '28px',
-          color: '#333',
-          flexShrink: 0,
-        }}
-      >
-        Колесо жизненного баланса
-      </h1>
-
       <div
         style={{
           background: 'white',

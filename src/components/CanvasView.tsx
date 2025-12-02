@@ -10,6 +10,9 @@ import {
   handleDragStart,
   handleDrag,
   handleDragEnd,
+  handleTouchStart,
+  handleTouchMove,
+  handleTouchEnd,
   resetTransform,
   type CanvasTransform,
 } from '../utils/canvasControls';
@@ -33,6 +36,19 @@ export function CanvasView() {
   const [dragStart, setDragStart] = useState<{ x: number; y: number } | null>(
     null
   );
+  const [touchDistance, setTouchDistance] = useState<number | null>(null);
+  const [initialScale, setInitialScale] = useState<number>(1);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  // Определение мобильного устройства
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Инициализация трансформации при монтировании
   useEffect(() => {
@@ -80,6 +96,34 @@ export function CanvasView() {
     handleDragEnd(setDragStart);
   };
 
+  const handleTouchStartEvent = (e: React.TouchEvent) => {
+    handleTouchStart(
+      e,
+      setDragStart,
+      setTouchDistance,
+      setInitialScale,
+      transform.scale
+    );
+  };
+
+  const handleTouchMoveEvent = (e: React.TouchEvent) => {
+    handleTouchMove(
+      e,
+      dragStart,
+      touchDistance,
+      initialScale,
+      transform,
+      setTransform,
+      setDragStart,
+      setTouchDistance,
+      containerRef
+    );
+  };
+
+  const handleTouchEndEvent = () => {
+    handleTouchEnd(setDragStart, setTouchDistance);
+  };
+
   return (
     <div
       ref={containerRef}
@@ -90,12 +134,16 @@ export function CanvasView() {
         position: 'relative',
         background: '#f5f5f5',
         cursor: dragStart ? 'grabbing' : 'grab',
+        touchAction: 'none', // Предотвращаем стандартное поведение браузера на мобильных
       }}
       onWheel={handleWheel}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStartEvent}
+      onTouchMove={handleTouchMoveEvent}
+      onTouchEnd={handleTouchEndEvent}
     >
       <svg
         width={CANVAS_WIDTH}
@@ -190,16 +238,17 @@ export function CanvasView() {
       <div
         style={{
           position: 'absolute',
-          top: '20px',
-          right: '20px',
+          top: '10px',
+          right: '10px',
           background: 'white',
-          padding: '10px',
+          padding: '8px 12px',
           borderRadius: '8px',
           boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
           zIndex: 10,
+          maxWidth: 'calc(100% - 20px)',
         }}
       >
-        <div style={{ marginBottom: '8px', fontSize: '12px', color: '#666' }}>
+        <div style={{ marginBottom: '6px', fontSize: '12px', color: '#666' }}>
           Масштаб: {(transform.scale * 100).toFixed(0)}%
         </div>
         <button
@@ -216,21 +265,32 @@ export function CanvasView() {
             }
           }}
           style={{
-            padding: '6px 12px',
+            padding: '8px 16px',
             fontSize: '12px',
             cursor: 'pointer',
             border: '1px solid #ccc',
             borderRadius: '4px',
             background: '#fff',
+            width: '100%',
+            minHeight: '44px', // Минимальный размер для удобного нажатия на мобильных
           }}
         >
           Сбросить вид
         </button>
-        <div style={{ marginTop: '8px', fontSize: '11px', color: '#999' }}>
-          Колесико мыши - зум
-          <br />
-          Перетаскивание - перемещение
-        </div>
+        {!isMobile && (
+          <div style={{ marginTop: '8px', fontSize: '10px', color: '#999' }}>
+            Колесико мыши - зум
+            <br />
+            Перетаскивание - перемещение
+          </div>
+        )}
+        {isMobile && (
+          <div style={{ marginTop: '8px', fontSize: '10px', color: '#999' }}>
+            Два пальца - зум
+            <br />
+            Один палец - перемещение
+          </div>
+        )}
       </div>
     </div>
   );
