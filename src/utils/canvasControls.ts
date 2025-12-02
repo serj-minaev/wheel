@@ -130,7 +130,6 @@ export function handleTouchMove(
   transform: CanvasTransform,
   setTransform: (transform: CanvasTransform) => void,
   setDragStart: (pos: { x: number; y: number } | null) => void,
-  setTouchDistance: (distance: number | null) => void,
   containerRef: React.RefObject<HTMLDivElement>
 ) {
   e.preventDefault(); // Предотвращаем стандартное поведение браузера

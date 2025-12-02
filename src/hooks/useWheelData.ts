@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { WheelData, Metric } from '../types/wheel';
+import type { WheelData } from '../types/wheel';
 import wheelDataJson from '../../data/wheel-data.json';
 
 export function useWheelData() {

@@ -115,7 +115,6 @@ export function CanvasView() {
       transform,
       setTransform,
       setDragStart,
-      setTouchDistance,
       containerRef
     );
   };
