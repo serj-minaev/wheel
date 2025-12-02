@@ -1,10 +1,8 @@
-// Простой service worker для PWA
+// Service worker для PWA
 const CACHE_NAME = 'wheel-of-life-v1';
 const urlsToCache = [
   '/',
-  '/index.html',
-  '/src/main.tsx',
-  '/src/App.tsx'
+  '/index.html'
 ];
 
 // Установка service worker
@@ -12,9 +10,14 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        return cache.addAll(urlsToCache);
+        // Пытаемся добавить файлы в кеш, но не блокируем установку при ошибках
+        return cache.addAll(urlsToCache).catch((err) => {
+          console.log('Ошибка кеширования:', err);
+        });
       })
   );
+  // Принудительно активируем новый service worker
+  self.skipWaiting();
 });
 
 // Активация service worker
@@ -30,6 +33,8 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
+  // Берем контроль над всеми страницами сразу
+  return self.clients.claim();
 });
 
 // Перехват запросов
