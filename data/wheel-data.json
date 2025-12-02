@@ -1,0 +1,143 @@
+{
+  "mainWheel": {
+    "metrics": [
+      {
+        "id": "finance",
+        "name": "Финансы",
+        "score": 5,
+        "subWheel": {
+          "metrics": [
+            { "id": "budget", "name": "Бюджет", "score": 5 },
+            { "id": "expenses", "name": "Текущие расходы и быт", "score": 5 },
+            { "id": "credit", "name": "Кредитование", "score": 5 },
+            { "id": "insurance", "name": "Страхование", "score": 5 },
+            { "id": "additional-income", "name": "Дополнительные доходы", "score": 5 },
+            { "id": "financial-goals", "name": "Финансовые цели и резервы", "score": 5 },
+            { "id": "investments", "name": "Инвестиции", "score": 5 },
+            { "id": "pension", "name": "Пенсия", "score": 5 }
+          ]
+        }
+      },
+      {
+        "id": "health",
+        "name": "Здоровье",
+        "score": 5,
+        "subWheel": {
+          "metrics": [
+            { "id": "physical-activity", "name": "Физическая активность", "score": 5 },
+            { "id": "nutrition", "name": "Питание", "score": 5 },
+            { "id": "sleep", "name": "Сон", "score": 5 },
+            { "id": "medical-checkups", "name": "Медицинские осмотры", "score": 5 },
+            { "id": "mental-health", "name": "Психическое здоровье", "score": 5 },
+            { "id": "habits", "name": "Вредные привычки", "score": 5 },
+            { "id": "energy", "name": "Уровень энергии", "score": 5 },
+            { "id": "prevention", "name": "Профилактика", "score": 5 }
+          ]
+        }
+      },
+      {
+        "id": "relationships",
+        "name": "Отношения",
+        "score": 5,
+        "subWheel": {
+          "metrics": [
+            { "id": "family", "name": "Семья", "score": 5 },
+            { "id": "partner", "name": "Партнер", "score": 5 },
+            { "id": "friends", "name": "Друзья", "score": 5 },
+            { "id": "colleagues", "name": "Коллеги", "score": 5 },
+            { "id": "communication", "name": "Коммуникация", "score": 5 },
+            { "id": "conflicts", "name": "Разрешение конфликтов", "score": 5 },
+            { "id": "support", "name": "Поддержка близких", "score": 5 },
+            { "id": "social-activities", "name": "Социальная активность", "score": 5 }
+          ]
+        }
+      },
+      {
+        "id": "career",
+        "name": "Карьера",
+        "score": 5,
+        "subWheel": {
+          "metrics": [
+            { "id": "job-satisfaction", "name": "Удовлетворенность работой", "score": 5 },
+            { "id": "skills", "name": "Профессиональные навыки", "score": 5 },
+            { "id": "growth", "name": "Профессиональный рост", "score": 5 },
+            { "id": "income", "name": "Доход от работы", "score": 5 },
+            { "id": "work-life-balance", "name": "Баланс работа/жизнь", "score": 5 },
+            { "id": "recognition", "name": "Признание и достижения", "score": 5 },
+            { "id": "team", "name": "Команда и отношения", "score": 5 },
+            { "id": "goals", "name": "Карьерные цели", "score": 5 }
+          ]
+        }
+      },
+      {
+        "id": "personal-growth",
+        "name": "Личностный рост",
+        "score": 5,
+        "subWheel": {
+          "metrics": [
+            { "id": "learning", "name": "Обучение и образование", "score": 5 },
+            { "id": "reading", "name": "Чтение", "score": 5 },
+            { "id": "hobbies", "name": "Хобби и интересы", "score": 5 },
+            { "id": "creativity", "name": "Творчество", "score": 5 },
+            { "id": "self-reflection", "name": "Саморефлексия", "score": 5 },
+            { "id": "challenges", "name": "Принятие вызовов", "score": 5 },
+            { "id": "values", "name": "Жизненные ценности", "score": 5 },
+            { "id": "mindfulness", "name": "Осознанность", "score": 5 }
+          ]
+        }
+      },
+      {
+        "id": "leisure",
+        "name": "Отдых",
+        "score": 5,
+        "subWheel": {
+          "metrics": [
+            { "id": "vacation", "name": "Отпуск и путешествия", "score": 5 },
+            { "id": "entertainment", "name": "Развлечения", "score": 5 },
+            { "id": "relaxation", "name": "Релаксация", "score": 5 },
+            { "id": "sports", "name": "Спорт и активный отдых", "score": 5 },
+            { "id": "culture", "name": "Культурные мероприятия", "score": 5 },
+            { "id": "social-leisure", "name": "Социальный отдых", "score": 5 },
+            { "id": "time-management", "name": "Управление временем для отдыха", "score": 5 },
+            { "id": "recovery", "name": "Восстановление сил", "score": 5 }
+          ]
+        }
+      },
+      {
+        "id": "environment",
+        "name": "Окружение",
+        "score": 5,
+        "subWheel": {
+          "metrics": [
+            { "id": "home", "name": "Дом и жилье", "score": 5 },
+            { "id": "workplace", "name": "Рабочее место", "score": 5 },
+            { "id": "neighborhood", "name": "Район проживания", "score": 5 },
+            { "id": "nature", "name": "Природа и экология", "score": 5 },
+            { "id": "safety", "name": "Безопасность", "score": 5 },
+            { "id": "comfort", "name": "Комфорт", "score": 5 },
+            { "id": "organization", "name": "Организация пространства", "score": 5 },
+            { "id": "aesthetics", "name": "Эстетика окружения", "score": 5 }
+          ]
+        }
+      },
+      {
+        "id": "spirituality",
+        "name": "Духовность",
+        "score": 5,
+        "subWheel": {
+          "metrics": [
+            { "id": "meaning", "name": "Смысл жизни", "score": 5 },
+            { "id": "meditation", "name": "Медитация и практики", "score": 5 },
+            { "id": "faith", "name": "Вера и религия", "score": 5 },
+            { "id": "gratitude", "name": "Благодарность", "score": 5 },
+            { "id": "connection", "name": "Связь с высшим", "score": 5 },
+            { "id": "purpose", "name": "Жизненное предназначение", "score": 5 },
+            { "id": "inner-peace", "name": "Внутренний покой", "score": 5 },
+            { "id": "philosophy", "name": "Философия жизни", "score": 5 }
+          ]
+        }
+      }
+    ]
+  }
+}
+
